@@ -1,7 +1,14 @@
+%% Extract epochs -300/+600 arounds the R-Peak from W, N2, N3, REM
 
-%%
+% Need file of 1 hour recording already preprocess : 
+% Downsampling from 1024hz to 128hz 
+% Bipolar Montage applied
+% Noisy electrodes removed (Brainstorm PSD check + >3SD test on matlab).
+
+% Need 4 empty folder called W, N2, N3, REM
+
 % Chemin du fichier 
-chemin_fichier = '/home/localadmin/Documents/AnalyseHEP/DATA_Clean/N2_2_clean.mat';
+chemin_fichier = '/home/localadmin/Documents/AnalyseHEP/DATA_Clean/N2_8_clean.mat';
 
 % Charger les données
 Data = load(chemin_fichier);
@@ -21,12 +28,12 @@ nb_REM = 0;
 nb_outside = 0;
 
 % Nombre total de battements cardiaques à extraire
-nb_HB = length(Data.Events(3).times); % Accéder au troisième champ 'HB'
+nb_HB = length(Data.Events(end).times); % Accéder au troisième champ 'HB'
 
 % Boucle sur les battements cardiaques
 for i = 1:nb_HB
     % Obtenir le timing du battement cardiaque
-    timing_HB = Data.Events(3).times(i); % Accéder au troisième champ 'HB'
+    timing_HB = Data.Events(end).times(i); % Accéder au troisième champ 'HB'
     
     % Initialiser une variable pour stocker l'événement correspondant au battement cardiaque
     event_label = '';
@@ -91,3 +98,4 @@ disp(['Nombre de HB pendant N2 = ' num2str(nb_N2)]);
 disp(['Nombre de HB pendant N3 = ' num2str(nb_N3)]);
 disp(['Nombre de HB pendant REM = ' num2str(nb_REM)]);
 disp(['Nombre de HB en dehors des événements d interet = ' num2str(nb_outside)]);
+
