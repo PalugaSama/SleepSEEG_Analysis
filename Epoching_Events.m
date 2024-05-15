@@ -7,8 +7,9 @@
 
 % Need 4 empty folder called W, N2, N3, REM
 
+
 % Chemin du fichier 
-chemin_fichier = '/home/localadmin/Documents/AnalyseHEP/DATA_Clean/N2_8_clean.mat';
+chemin_fichier = '/home/localadmin/Documents/AnalyseHEP/DATA_Clean/N2_1_clean.mat';
 
 % Charger les données
 Data = load(chemin_fichier);
@@ -78,14 +79,17 @@ for i = 1:nb_HB
 
         % Déterminer l'indice du début et de la fin du segment
         start_index = round((timing_HB - avant_HB) * 128); % Convertir le temps en indice
-        end_index = round((timing_HB + apres_HB) * 128); % Convertir le temps en indice
-
+        end_index = round((timing_HB + apres_HB) * 128); % Convertir le temps
+        
         % Extraire le segment de signal
         segment_data = Data.raw_data_clean(:, start_index:end_index);
-
-        % Enregistrer le segment dans le dossier correspondant à l'état de conscience
-        chemin_segment = fullfile(chemin_sauvegarde, event_label, ['HB_' event_label '_' num2str(i) '.mat']);
-        save(chemin_segment, 'segment_data');
+        
+        % Créer la matrice de temps associée au segment
+        segment_time = (0:size(segment_data, 2) - 1) / 128 - avant_HB;
+        
+        % Enregistrer le segment et la matrice de temps dans le dossier correspondant à l'état de conscience
+        chemin_segment = fullfile(chemin_sauvegarde, event_label, ['HB_' event_label '_' num2str(i) '-1.mat']);
+        save(chemin_segment, 'segment_data', 'segment_time');
 
         % Afficher un message de succès
         disp(['Segment HB_' event_label '_' num2str(i) ' extrait et sauvegardé avec succès dans ' chemin_segment]);
